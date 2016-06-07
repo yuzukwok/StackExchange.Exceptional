@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using StackExchange.Exceptional.Extensions;
+using AsyncFriendlyStackTrace;
 
 namespace StackExchange.Exceptional
 {
@@ -94,7 +95,8 @@ namespace StackExchange.Exceptional
             Type = baseException.GetType().FullName;
             Message = baseException.Message;
             Source = baseException.Source;
-            Detail = e.ToString();
+            //Friendly Async Exception
+            Detail = e.ToAsyncString();
             CreationDate = DateTime.UtcNow;
             DuplicateCount = 1;
             

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AsyncFriendlyStackTrace</name>
+    </assembly>
+    <members>
+        <member name="T:AsyncFriendlyStackTrace.ExceptionExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:System.Exception"/>.
+            </summary>
+        </member>
+        <member name="M:AsyncFriendlyStackTrace.ExceptionExtensions.ToAsyncString(System.Exception)">
+            <summary>
+            Gets an async-friendly <see cref="T:System.Exception"/> string using <see cref="M:AsyncFriendlyStackTrace.StackTraceExtensions.ToAsyncString(System.Diagnostics.StackTrace)"/>.
+            Includes special handling for <see cref="T:System.AggregateException"/>s.
+            </summary>
+            <param name="exception">The exception to format.</param>
+            <returns>An async-friendly string representation of an <see cref="T:System.Exception"/>.</returns>
+        </member>
+        <member name="M:AsyncFriendlyStackTrace.ExceptionExtensions.PrepareForAsyncSerialization(System.Exception)">
+            <summary>
+            Prepares an <see cref="T:System.Exception"/> for serialization by including the async-friendly
+            stack trace as additional <see cref="P:System.Exception.Data"/>.
+            Note that both the original and the new stack traces will be serialized.
+            This method operates recursively on all inner exceptions,
+            including ones in an <see cref="T:System.AggregateException"/>.
+            </summary>
+            <param name="exception">The exception.</param>
+        </member>
+        <member name="M:AsyncFriendlyStackTrace.ReflectionUtil.GenerateGetField``2(System.String)">
+            <summary>
+            Allows accessing private fields efficiently.
+            </summary>
+            <typeparam name="TOwner">Type of the field's owner.</typeparam>
+            <typeparam name="TField">Type of the field.</typeparam>
+            <param name="fieldName">The field name.</param>
+            <returns>A delegate field accessor.</returns>
+        </member>
+        <member name="T:AsyncFriendlyStackTrace.StackTraceExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:System.Diagnostics.StackTrace"/>.
+            </summary>
+        </member>
+        <member name="M:AsyncFriendlyStackTrace.StackTraceExtensions.ToAsyncString(System.Diagnostics.StackTrace)">
+            <summary>
+            Produces an async-friendly readable representation of the stack trace.
+            </summary>
+            <remarks>
+            The async-friendly formatting is archieved by:
+            * Skipping all awaiter frames (all methods in types implementing <see cref="T:System.Runtime.CompilerServices.INotifyCompletion"/>).
+            * Inferring the original method name from the async state machine class (<see cref="T:System.Runtime.CompilerServices.IAsyncStateMachine"/>)
+              and removing the "MoveNext" - currently only for C#.
+            * Adding the "async" prefix after "at" on each line for async invocations.
+            * Appending "(?)" to the method signature to indicate that parameter information is missing.
+            * Removing the "End of stack trace from previous location..." text.
+            </remarks>
+            <param name="stackTrace">The stack trace.</param>
+            <returns>An async-friendly readable representation of the stack trace.</returns>
+        </member>
+    </members>
+</doc>
